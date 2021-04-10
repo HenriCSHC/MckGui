@@ -1,0 +1,13 @@
+[submodule "cpp-httplib"]
+	path = cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib
+[submodule "webview"]
+	path = webview
+	url = https://github.com/webview/webview
+[submodule "concurrentqueue"]
+	path = concurrentqueue
+	url = https://github.com/cameron314/concurrentqueue/
+[submodule "json"]
+	path = json
+	url = https://github.com/nlohmann/json
+	branch = master
