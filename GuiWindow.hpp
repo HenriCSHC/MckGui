@@ -39,7 +39,8 @@ namespace mck
     public:
         GuiWindow();
         ~GuiWindow();
-        bool Show(std::string title, std::string path, unsigned port = 9002);
+        bool Show(std::string title, std::string path, unsigned port = 9000);
+        bool ShowDebug(std::string title, unsigned port = 5000);
         void Close();
 
         template <typename T>
