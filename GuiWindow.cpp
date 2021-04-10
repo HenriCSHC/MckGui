@@ -5,7 +5,9 @@
 void MsgFromGui(std::string idx, std::string msg, void *arg)
 {
     mck::GuiWindow *win = (mck::GuiWindow *)arg;
-    std::cout << "Msg from GUI: " << idx << " : " << msg << std::endl;
+    #ifdef DEBUG
+        std::cout << "Msg from GUI: " << idx << " : " << msg << std::endl;
+    #endif
 
     win->ReceiveMessage(msg);
 
