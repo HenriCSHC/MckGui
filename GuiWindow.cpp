@@ -13,6 +13,32 @@ void MsgFromGui(std::string idx, std::string msg, void *arg)
 
     return;
 }
+void MsgBoxFromGui(std::string idx, std::string msg, void *arg)
+{
+    mck::GuiWindow *win = (mck::GuiWindow *)arg;
+    #ifdef DEBUG
+        std::cout << "Message box from GUI: " << idx << " : " << msg << std::endl;
+    #endif
+
+    std::vector<std::string> msgs;
+    try
+    {
+        nlohmann::json j = nlohmann::json::parse(msg);
+        msgs = j.get<std::vector<std::string>>();
+    }
+    catch (std::exception &e)
+    {
+        return;
+    }
+
+    for(auto &m : msgs) {
+        if (m != "") {
+            win->ShowMessageBox(m);
+        }
+    }
+
+    return;
+}
 
 
 void mck::to_json(nlohmann::json &j, const Message &m)
@@ -72,11 +98,44 @@ bool mck::GuiWindow::Show(std::string title, std::string path, unsigned port)
     m_window->set_size(1280, 720, WEBVIEW_HINT_NONE);
     m_window->navigate("http://localhost:" + std::to_string(port));
     m_window->bind("SendMessage", MsgFromGui, (void *)this);
+    m_window->bind("ShowMessageBox", MsgBoxFromGui, (void *)this);
 
     m_isInitialized = true;
     m_window->run();
 
     return true;
+}
+
+
+bool mck::GuiWindow::ShowMessageBox(std::string msg)
+{
+    if (m_isInitialized == false)
+    {
+        std::cerr << "GuiWindow is not visible" << std::endl;
+        return false;
+    }
+
+    m_window->show_message_box(msg);
+
+    return true;
+}
+
+bool mck::GuiWindow::ShowOpenFileDialog(std::string title, std::string mimeType, std::vector<std::string> &files, bool multi)
+{
+    if (m_isInitialized == false)
+    {
+        std::cerr << "GuiWindow is not visible" << std::endl;
+        return false;
+    }
+
+    files.clear();
+
+    m_window->show_open_file_dialog(title, mimeType, files, multi);
+
+    for(auto &f : files)
+    {
+        std::cout << "Open file: " << f << std::endl;
+    }
 }
 
 void mck::GuiWindow::Close()

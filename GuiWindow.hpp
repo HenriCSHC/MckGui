@@ -40,6 +40,8 @@ namespace mck
         GuiWindow();
         ~GuiWindow();
         bool Show(std::string title, std::string path, unsigned port = 9002);
+        bool ShowMessageBox(std::string msg);
+        bool ShowOpenFileDialog(std::string title, std::string mimeType, std::vector<std::string> &files, bool multi = false);
         void Close();
 
         template <typename T>

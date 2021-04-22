@@ -3,7 +3,7 @@
 	url = https://github.com/yhirose/cpp-httplib
 [submodule "webview"]
 	path = webview
-	url = https://github.com/webview/webview
+	url = ../webview.git
 [submodule "concurrentqueue"]
 	path = concurrentqueue
 	url = https://github.com/cameron314/concurrentqueue/
