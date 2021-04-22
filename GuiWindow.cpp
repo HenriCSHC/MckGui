@@ -138,6 +138,24 @@ bool mck::GuiWindow::ShowOpenFileDialog(std::string title, std::string mimeType,
     }
 }
 
+bool mck::GuiWindow::ShowDebug(std::string title, unsigned port)
+{
+    if (m_isInitialized == true)
+    {
+        std::cerr << "GuiWindow is already shown" << std::endl;
+        return false;
+    }
+
+    m_window->set_title(title);
+    m_window->set_size(1280, 720, WEBVIEW_HINT_NONE);
+    m_window->navigate("http://localhost:" + std::to_string(port));
+    m_window->bind("SendMessage", MsgFromGui, (void *)this);
+
+    m_isInitialized = true;
+    m_window->run();
+
+    return true;
+}
 void mck::GuiWindow::Close()
 {
     m_done = true;
