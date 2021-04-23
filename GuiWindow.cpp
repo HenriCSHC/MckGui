@@ -132,10 +132,14 @@ bool mck::GuiWindow::ShowOpenFileDialog(std::string title, std::string mimeType,
 
     m_window->show_open_file_dialog(title, mimeType, files, multi);
 
+    #ifdef DEBUG
     for(auto &f : files)
     {
         std::cout << "Open file: " << f << std::endl;
     }
+    #endif
+
+    return true;
 }
 
 bool mck::GuiWindow::ShowDebug(std::string title, unsigned port)
