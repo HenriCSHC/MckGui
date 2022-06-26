@@ -34,6 +34,15 @@ namespace mck
         virtual void ReceiveMessage(Message &msg) = 0;
     };
 
+    struct GuiSettings
+    {
+        std::string title = "";
+        std::string path = "";
+        unsigned port = 9000;
+        unsigned height = 1024;
+        unsigned width = 1280;
+    };
+
     class GuiWindow
     {
     public:
@@ -41,8 +50,8 @@ namespace mck
         ~GuiWindow();
         bool ShowMessageBox(std::string msg);
         bool ShowOpenFileDialog(std::string title, std::string mimeType, std::vector<std::string> &files, bool multi = false);
-        bool Show(std::string title, std::string path, unsigned port = 9000);
-        bool ShowDebug(std::string title, unsigned port = 5000);
+        bool Show(const GuiSettings &settings);
+        bool ShowDebug(const GuiSettings &settings);
         void Close();
 
         template <typename T>

@@ -72,7 +72,7 @@ mck::GuiWindow::~GuiWindow()
     delete m_window;
 }
 
-bool mck::GuiWindow::Show(std::string title, std::string path, unsigned port)
+bool mck::GuiWindow::Show(const GuiSettings &settings)
 {
     if (m_isInitialized == true)
     {
@@ -81,24 +81,42 @@ bool mck::GuiWindow::Show(std::string title, std::string path, unsigned port)
     }
 
     // HTML Server
-    bool ret = m_server->set_mount_point("/", path.c_str());
+    bool ret = m_server->set_mount_point("/", settings.path.c_str());
     if (ret == false)
     {
-        std::cerr << "Failed to set mount point to path " << path << "! Does the path exist?" << std::endl;
+        std::cerr << "Failed to set mount point to path " << settings.path << "! Does the path exist?" << std::endl;
         return false;
     }
-    m_serverThread = std::thread([this, &port]() {
-        m_server->listen("localhost", port);
+    m_serverThread = std::thread([this, &settings]() {
+        m_server->listen("localhost", settings.port);
     });
 
     // Send Thread
     //m_sendThread = std::thread(&mck::GuiWindow::SendThread, this);
-
-    m_window->set_title(title);
-    m_window->set_size(1280, 720, WEBVIEW_HINT_NONE);
-    m_window->navigate("http://localhost:" + std::to_string(port));
+    m_window->set_title(settings.title);
+    m_window->set_size(settings.width, settings.height, WEBVIEW_HINT_NONE);
+    m_window->navigate("http://localhost:" + std::to_string(settings.port));
     m_window->bind("SendMessage", MsgFromGui, (void *)this);
     m_window->bind("ShowMessageBox", MsgBoxFromGui, (void *)this);
+
+    m_isInitialized = true;
+    m_window->run();
+
+    return true;
+}
+
+bool mck::GuiWindow::ShowDebug(const GuiSettings &settings)
+{
+    if (m_isInitialized == true)
+    {
+        std::cerr << "GuiWindow is already shown" << std::endl;
+        return false;
+    }
+
+    m_window->set_title(settings.title);
+    m_window->set_size(settings.width, settings.height, WEBVIEW_HINT_NONE);
+    m_window->navigate("http://localhost:" + std::to_string(settings.port));
+    m_window->bind("SendMessage", MsgFromGui, (void *)this);
 
     m_isInitialized = true;
     m_window->run();
@@ -142,24 +160,6 @@ bool mck::GuiWindow::ShowOpenFileDialog(std::string title, std::string mimeType,
     return true;
 }
 
-bool mck::GuiWindow::ShowDebug(std::string title, unsigned port)
-{
-    if (m_isInitialized == true)
-    {
-        std::cerr << "GuiWindow is already shown" << std::endl;
-        return false;
-    }
-
-    m_window->set_title(title);
-    m_window->set_size(1280, 720, WEBVIEW_HINT_NONE);
-    m_window->navigate("http://localhost:" + std::to_string(port));
-    m_window->bind("SendMessage", MsgFromGui, (void *)this);
-
-    m_isInitialized = true;
-    m_window->run();
-
-    return true;
-}
 void mck::GuiWindow::Close()
 {
     m_done = true;
