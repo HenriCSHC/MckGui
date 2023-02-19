@@ -1,5 +1,5 @@
 #pragma once
-#include "concurrentqueue/concurrentqueue.h"
+#include <concurrentqueue.h>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <thread>

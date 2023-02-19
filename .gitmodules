@@ -7,7 +7,3 @@
 [submodule "concurrentqueue"]
 	path = concurrentqueue
 	url = https://github.com/cameron314/concurrentqueue/
-[submodule "json"]
-	path = json
-	url = https://github.com/nlohmann/json
-	branch = master

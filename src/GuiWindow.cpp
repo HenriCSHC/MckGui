@@ -1,6 +1,6 @@
 #include "GuiWindow.hpp"
-#include "webview/webview.h"
-#include "cpp-httplib/httplib.h"
+#include <webview.h>
+#include <httplib.h>
 
 void MsgFromGui(std::string idx, std::string msg, void *arg)
 {
